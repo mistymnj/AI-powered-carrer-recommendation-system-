@@ -1,0 +1,110 @@
+
+# AI-Powered Career Recommendation System
+
+career_data = {
+    "Python Developer": {
+        "skills": ["python", "programming", "problem solving"],
+        "description": "Develop applications using Python."
+    },
+    "AI Engineer": {
+        "skills": ["python", "artificial intelligence", "machine learning"],
+        "description": "Build intelligent systems and AI applications."
+    },
+    "Web Developer": {
+        "skills": ["html", "css", "javascript", "web development"],
+        "description": "Create websites and web applications."
+    },
+    "Data Analyst": {
+        "skills": ["python", "sql", "data analysis", "excel"],
+        "description": "Analyze data and discover useful insights."
+    },
+    "Java Developer": {
+        "skills": ["java", "programming", "problem solving"],
+        "description": "Build software applications using Java."
+    }
+}
+
+
+def recommend_careers(user_skills):
+    recommendations = []
+
+    for career, details in career_data.items():
+        matched_skills = [
+            skill for skill in details["skills"]
+            if skill in user_skills
+        ]
+
+        if matched_skills:
+            score = round(
+                len(matched_skills) / len(details["skills"]) * 100
+            )
+
+            recommendations.append({
+                "career": career,
+                "score": score,
+                "matched_skills": matched_skills,
+                "description": details["description"],
+                "missing_skills": [
+                    skill for skill in details["skills"]
+                    if skill not in user_skills
+                ]
+            })
+
+    recommendations.sort(
+        key=lambda item: item["score"],
+        reverse=True
+    )
+
+    return recommendations
+
+
+def main():
+    print("=" * 45)
+    print(" AI-POWERED CAREER RECOMMENDATION SYSTEM")
+    print("=" * 45)
+
+    print("\nEnter your skills separated by commas.")
+    print("Example: python, programming, problem solving")
+
+    user_input = input("\nYour skills: ").lower()
+
+    user_skills = {
+        skill.strip() for skill in user_input.split(",")
+        if skill.strip()
+    }
+
+    if not user_skills:
+        print("Please enter at least one skill.")
+        return
+
+    results = recommend_careers(user_skills)
+
+    if not results:
+        print("\nNo matching careers found.")
+        print("Try entering skills such as Python, Java, SQL or HTML.")
+        return
+
+    print("\n--- YOUR CAREER RECOMMENDATIONS ---")
+
+    for result in results:
+        print(f"\nCareer: {result['career']}")
+        print(f"Skill Match: {result['score']}%")
+        print(f"Description: {result['description']}")
+        print(
+            "Matched Skills: "
+            + ", ".join(result["matched_skills"])
+        )
+
+        if result["missing_skills"]:
+            print(
+                "Skills to Improve: "
+                + ", ".join(result["missing_skills"])
+            )
+        else:
+            print("Skills to Improve: None from this skill list")
+
+    print("\nKeep learning and improving your skills!")
+
+
+if __name__ == "__main__":
+    main()
